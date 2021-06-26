@@ -16,7 +16,7 @@
  *  with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package me.yic.xconomy.depend;
+package me.yic.xconomy.depend.economy;
 
 import me.yic.xconomy.XConomy;
 import me.yic.xconomy.data.caches.Cache;
@@ -97,9 +97,9 @@ public class Vault extends AbstractEconomy {
         }
 
         double bal = getBalance(name);
-        BigDecimal amountFormatted = DataFormat.formatDouble(amount);
+        BigDecimal amountFormatted = DataFormat.formatdouble(amount);
 
-        if (DataFormat.isMAX(DataFormat.formatDouble(bal).add(amountFormatted))) {
+        if (DataFormat.isMAX(DataFormat.formatdouble(bal).add(amountFormatted))) {
             return new EconomyResponse(0.0D, bal, EconomyResponse.ResponseType.FAILURE, "Max balance!");
         }
 
@@ -128,7 +128,7 @@ public class Vault extends AbstractEconomy {
 
     @Override
     public int fractionalDigits() {
-        if (DataFormat.isInteger) {
+        if (DataFormat.isint) {
             return 0;
         }
         return 2;
@@ -222,7 +222,7 @@ public class Vault extends AbstractEconomy {
         }
 
         double bal = getBalance(name);
-        BigDecimal amountFormatted = DataFormat.formatDouble(amount);
+        BigDecimal amountFormatted = DataFormat.formatdouble(amount);
 
         if (bal < amount) {
             return new EconomyResponse(0.0D, bal, EconomyResponse.ResponseType.FAILURE, "Insufficient balance!");

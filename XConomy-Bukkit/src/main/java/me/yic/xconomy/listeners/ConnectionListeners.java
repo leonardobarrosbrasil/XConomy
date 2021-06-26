@@ -23,6 +23,7 @@ import me.yic.xconomy.data.DataCon;
 import me.yic.xconomy.data.caches.Cache;
 import me.yic.xconomy.lang.MessagesManager;
 import me.yic.xconomy.task.Updater;
+import me.yic.xconomy.utils.DataBaseINFO;
 import me.yic.xconomy.utils.ServerINFO;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -39,20 +40,27 @@ public class ConnectionListeners implements Listener {
         if (Bukkit.getOnlinePlayers().size() == 1) {
             Cache.clearCache();
         }
+        if (!ServerINFO.IsBungeeCordMode) {
+            TabList.PlayerList.remove(event.getPlayer().getName());
+        }
     }
 
     @SuppressWarnings("unused")
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player a = event.getPlayer();
-        if (ServerINFO.RequireAsyncRun) {
-            Bukkit.getScheduler().runTaskAsynchronously(XConomy.getInstance(), () -> DataCon.newPlayer(a));
-        }else{
+        if (DataBaseINFO.getStorageType() == 0 || DataBaseINFO.getStorageType() == 1) {
             DataCon.newPlayer(a);
+        } else {
+            Bukkit.getScheduler().runTaskAsynchronously(XConomy.getInstance(), () -> DataCon.newPlayer(a));
         }
 
         if (!XConomy.config.getBoolean("Settings.semi-online-mode")) {
             Cache.translateUUID(a.getName(), a);
+        }
+
+        if (!TabList.PlayerList.contains(a.getName())) {
+            TabList.PlayerList.add(a.getName());
         }
 
         if (a.isOp()) {
